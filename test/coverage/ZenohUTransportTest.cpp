@@ -18,7 +18,7 @@
 
 #include "up-transport-zenoh-cpp/ZenohUTransport.h"
 
-namespace uprotocol{
+namespace uprotocol {
 
 constexpr std::string_view ZENOH_CONFIG_FILE = BUILD_REALPATH_ZENOH_CONF;
 
