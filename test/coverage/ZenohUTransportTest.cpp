@@ -18,9 +18,7 @@
 
 #include "up-transport-zenoh-cpp/ZenohUTransport.h"
 
-namespace {
-
-using namespace uprotocol;
+namespace uprotocol{
 
 constexpr std::string_view ZENOH_CONFIG_FILE = BUILD_REALPATH_ZENOH_CONF;
 
@@ -115,4 +113,4 @@ TEST_F(TestZenohUTransport, toZenohKeyString) {
 	          "up/*/*/*/*/[::1]/*/*/*");
 }
 
-}  // namespace
+}  // namespace uprotocol
