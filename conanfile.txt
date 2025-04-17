@@ -1,5 +1,5 @@
 [requires]
-up-cpp/[^1.0.1]
+up-cpp/1.0.1-dev
 zenohcpp/1.2.1
 zenohc/1.2.1
 spdlog/[~1.13]
