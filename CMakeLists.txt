@@ -16,7 +16,7 @@ find_package(protobuf REQUIRED)
 find_package(spdlog REQUIRED)
 find_package(up-core-api REQUIRED)
 find_package(up-cpp REQUIRED)
-# find_package(zenohcpp REQUIRED)
+find_package(zenohcpp REQUIRED)
 
 # TODO NEEDED?
 #add_definitions(-DSPDLOG_FMT_EXTERNAL)
