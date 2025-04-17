@@ -8,14 +8,14 @@ on:
 
 jobs:
   build:
-    name: Build up-transport-zenoh-cpp and dependencies
+    name: Build up-subscription-cpp and dependencies
     runs-on: ubuntu-22.04
 
     steps:
-      - name: Fetch up-transport-zenoh-cpp
+      - name: Fetch up-subscription-cpp
         uses: actions/checkout@v4
         with:
-          path: up-transport-zenoh-cpp
+          path: up-subscription-cpp
 
       - name: Install Conan
         id: conan
@@ -27,7 +27,7 @@ jobs:
         shell: bash
         run: |
           conan profile detect
-          cp up-transport-zenoh-cpp/.github/workflows/ci_conan_profile "$(conan profile path default)"
+          cp up-subscription-cpp/.github/workflows/ci_conan_profile "$(conan profile path default)"
           conan profile show
 
       - name: Fetch up-core-api conan recipe
@@ -52,10 +52,10 @@ jobs:
           conan create --version 1.2.1 up-conan-recipes/zenohc-tmp/prebuilt
           conan create --version 1.2.1 up-conan-recipes/zenohcpp-tmp/from-source
 
-      - name: Build up-transport-zenoh-cpp with tests
+      - name: Build up-subscription-cpp with tests
         shell: bash
         run: |
-          cd up-transport-zenoh-cpp
+          cd up-subscription-cpp
           conan install --build=missing . --deployer=full_deploy 
           cmake --preset conan-release -DCMAKE_EXPORT_COMPILE_COMMANDS=yes
           cd build/Release
@@ -66,15 +66,15 @@ jobs:
         with:
           name: build-artifacts
           path: |
-            up-transport-zenoh-cpp/build/Release
-            up-transport-zenoh-cpp/test/*.json5
-            up-transport-zenoh-cpp/full_deploy
+            up-subscription-cpp/build/Release
+            up-subscription-cpp/test/*.json5
+            up-subscription-cpp/full_deploy
 
       - name: Upload compile commands
         uses: actions/upload-artifact@v4
         with:
           name: compile-commands
-          path: up-transport-zenoh-cpp/build/Release/compile_commands.json
+          path: up-subscription-cpp/build/Release/compile_commands.json
 
       - name: Save conan cache to archive
         shell: bash
@@ -88,7 +88,7 @@ jobs:
           path: ./conan-cache.tgz
 
   test:
-    name: Run up-transport-zenoh-cpp tests
+    name: Run up-subscription-cpp tests
     runs-on: ubuntu-22.04
     needs: build
 
@@ -97,12 +97,12 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: build-artifacts
-          path: up-transport-zenoh-cpp
+          path: up-subscription-cpp
 
       - name: Run all tests
         shell: bash
         run: |
-          cd up-transport-zenoh-cpp/build/Release
+          cd up-subscription-cpp/build/Release
           chmod +x bin/*
           ctest
 
@@ -111,7 +111,7 @@ jobs:
         if: success() || failure()
         with:
           name: test-results
-          path: 'up-transport-zenoh-cpp/build/Release/test/results/*.xml'
+          path: 'up-subscription-cpp/build/Release/test/results/*.xml'
 
   lint:
     name: Lint C++ sources
@@ -119,10 +119,10 @@ jobs:
     needs: build
 
     steps:
-      - name: Fetch up-transport-zenoh-cpp
+      - name: Fetch up-subscription-cpp
         uses: actions/checkout@v4
         with:
-          path: up-transport-zenoh-cpp
+          path: up-subscription-cpp
 
       - name: Get build commands
         uses: actions/download-artifact@v4
@@ -139,7 +139,7 @@ jobs:
         shell: bash
         run: |
           conan profile detect
-          cp up-transport-zenoh-cpp/.github/workflows/ci_conan_profile "$(conan profile path default)"
+          cp up-subscription-cpp/.github/workflows/ci_conan_profile "$(conan profile path default)"
           conan profile show
 
       - name: Get conan cache
@@ -158,7 +158,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          repo-root: up-transport-zenoh-cpp
+          repo-root: up-subscription-cpp
           ignore: 'test'
           style: 'file' # read .clang-format for configuration
           tidy-checks: '' # Read .clang-tidy for configuration
@@ -171,7 +171,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          repo-root: up-transport-zenoh-cpp
+          repo-root: up-subscription-cpp
           ignore: 'src|include'
           style: 'file' # read .clang-format for configuration
           tidy-checks: '' # Read .clang-tidy for configuration
@@ -195,7 +195,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: build-artifacts
-          path: up-transport-zenoh-cpp
+          path: up-subscription-cpp
 
       - name: Install Valgrind
         run: |
@@ -205,7 +205,7 @@ jobs:
       - name: Run Valgrind Memcheck
         continue-on-error: true
         run: |
-          cd up-transport-zenoh-cpp/build/Release
+          cd up-subscription-cpp/build/Release
           touch valgrind_exclude_test_memcheck.txt
           chmod +x bin/*
           mkdir -p valgrind_logs
@@ -251,7 +251,7 @@ jobs:
         if: success() || failure()
         with:
           name: valgrind-memcheck-log
-          path: up-transport-zenoh-cpp/build/Release/valgrind_logs/valgrind_complete_memcheck_log.log
+          path: up-subscription-cpp/build/Release/valgrind_logs/valgrind_complete_memcheck_log.log
 
   threadcheck:
     name: Run Valgrind ThreadCheck
@@ -263,7 +263,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: build-artifacts
-          path: up-transport-zenoh-cpp
+          path: up-subscription-cpp
 
       - name: Install Valgrind
         run: |
@@ -273,7 +273,7 @@ jobs:
       - name: Run Valgrind ThreadCheck
         continue-on-error: true
         run: |
-          cd up-transport-zenoh-cpp/build/Release
+          cd up-subscription-cpp/build/Release
           touch valgrind_exclude_test_threadcheck.txt
           chmod +x bin/*
           mkdir -p valgrind_logs
@@ -321,7 +321,7 @@ jobs:
         if: success() || failure()
         with:
           name: valgrind-threadcheck-log
-          path: up-transport-zenoh-cpp/build/Release/valgrind_logs/valgrind_complete_threadcheck_log.log
+          path: up-subscription-cpp/build/Release/valgrind_logs/valgrind_complete_threadcheck_log.log
 
   helgrind:
     name: Run Valgrind Helgrind
@@ -333,7 +333,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: build-artifacts
-          path: up-transport-zenoh-cpp
+          path: up-subscription-cpp
 
       - name: Install Valgrind
         run: |
@@ -343,7 +343,7 @@ jobs:
       - name: Run Valgrind Helgrind
         continue-on-error: true
         run: |
-          cd up-transport-zenoh-cpp/build/Release
+          cd up-subscription-cpp/build/Release
           touch valgrind_exclude_test_helgrind.txt
           chmod +x bin/*
           mkdir -p valgrind_logs
@@ -391,7 +391,7 @@ jobs:
         if: success() || failure()
         with:
           name: valgrind-helgrind-log
-          path: up-transport-zenoh-cpp/build/Release/valgrind_logs/valgrind_complete_helgrind_log.log
+          path: up-subscription-cpp/build/Release/valgrind_logs/valgrind_complete_helgrind_log.log
 
   dhat:
     name: Run Valgrind DHAT
@@ -403,7 +403,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: build-artifacts
-          path: up-transport-zenoh-cpp
+          path: up-subscription-cpp
 
       - name: Install Valgrind
         run: |
@@ -413,7 +413,7 @@ jobs:
       - name: Run Valgrind DHAT
         continue-on-error: true
         run: |
-          cd up-transport-zenoh-cpp/build/Release
+          cd up-subscription-cpp/build/Release
           touch valgrind_exclude_test_dhat.txt
           chmod +x bin/*
           mkdir -p valgrind_logs
@@ -461,7 +461,7 @@ jobs:
         if: success() || failure()
         with:
           name: valgrind-dhat-log
-          path: up-transport-zenoh-cpp/build/Release/valgrind_logs/valgrind_complete_dhat_log.log
+          path: up-subscription-cpp/build/Release/valgrind_logs/valgrind_complete_dhat_log.log
   # NOTE: In GitHub repository settings, the "Require status checks to pass
   # before merging" branch protection rule ensures that commits are only merged
   # from branches where specific status checks have passed. These checks are
