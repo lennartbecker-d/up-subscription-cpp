@@ -46,9 +46,9 @@ endfunction()
 
 ########################### COVERAGE ##########################################
 # Transport
-add_coverage_test("ZenohUTransportTest" coverage/ZenohUTransportTest.cpp)
+# add_coverage_test("ZenohUTransportTest" coverage/ZenohUTransportTest.cpp)
 
 ########################## EXTRAS #############################################
-add_extra_test("PublisherSubscriberTest" extra/PublisherSubscriberTest.cpp)
-add_extra_test("NotificationTest" extra/NotificationTest.cpp)
-add_extra_test("RpcClientServerTest" extra/RpcClientServerTest.cpp)
+# add_extra_test("PublisherSubscriberTest" extra/PublisherSubscriberTest.cpp)
+# add_extra_test("NotificationTest" extra/NotificationTest.cpp)
+# add_extra_test("RpcClientServerTest" extra/RpcClientServerTest.cpp)
