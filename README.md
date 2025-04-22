@@ -19,6 +19,9 @@ Conan packages:
 
 1. [up-core-api][spec-repo] - `conan create --version 1.6.0-alpha4 --build=missing up-core-api/release`
 2. [up-cpp][cpp-api-repo] - `conan create --version 1.0.1-dev --build=missing up-cpp/developer`
+3. [zenoh-c][zenoh-repo] - `conan create --version 1.2.1 zenohc-tmp/prebuilt`
+4. [zenoh-c][zenoh-repo] - `conan create --version 1.2.1 zenohcpp-tmp/from-source`
+5. [up-transport-soecket-cpp][up-transport-socket-cpp-repo] - `conan create --version 1.0.0-dev --build=missing up-transport-socket-cpp/developer`
 
 **NOTE:** all `conan` commands in this document use  Conan 2.x syntax. Please
 adjust accordingly when using Conan 1.x.
